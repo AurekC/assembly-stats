@@ -1,0 +1,19 @@
+#include<iostream>
+#include<fstream>
+#include<vector>
+
+using namespace std;
+int main()
+{ char buffer[80];
+ vector<char> vec;
+ ifstream fin("plantgenome.txt");
+ while(!fin.eof())
+ {
+     fin.read(buffer,80);
+         vec.insert(vec.end(), buffer, buffer + fin.gcount());
+	 }
+
+return 0;
+
+}
+

@@ -2,6 +2,7 @@
 #include<fstream>
 #include<vector>
 #include<string>
+#include<sstream>
 
 using std::cout;
 using std::string;
@@ -26,7 +27,8 @@ public:
   string to_string() {
     std::stringstream ss;
     ss << "N Sequences\t" << nos << '\n'
-       << "A\t" << noa << '\n';
+       << "A\t" << noa << '\n' << "T\t" << not1 << '\n' << "G\t" << nog << '\n' << " C\t" << noc 
+<<'\n' << "N\t" << non <<'\n'<< "N contigs\t" << nocon << '\n' << "total\t" << total << '\n';
     return ss.str();
   }
   uint64_t nos = 0;
@@ -35,6 +37,7 @@ public:
   uint64_t nog = 0;
   uint64_t noc = 0;
   uint64_t non = 0;
+  uint64_t nocon = 0;
   double a_percent = 0.0;
   double t_percent = 0.0;
   double g_percent = 0.0;
@@ -91,12 +94,35 @@ int main(const int argc, const char ** argv)
         }
     }
 
-ob2.total = ob2.noa + ob2.not1 + ob2.nog + ob2.c_percent + ob2.n_percent;
+ob2.total = ob2.noa + ob2.not1 + ob2.nog + ob2.noc + ob2.non;
 ob2.a_percent = (ob2.noa / ob2.total) * 100;
 ob2.t_percent = (ob2.not1 / ob2.total) * 100;
 ob2.g_percent = (ob2.nog / ob2.total) * 100;
 ob2.c_percent = (ob2.noc / ob2.total) * 100;
 ob2.n_percent = (ob2.non / ob2.total) * 100;
+
+int q=0,x=0;int flag=0;
+for (genome& record: genome_vec) 
+  {
+ for (char& nuc : record.seq())
+      {  
+       if (nuc=='N')
+           q++;
+      } 
+      if(q>=25)
+       { 
+         x++;q=0;flag=1;
+       }
+      if(flag ==1)
+      ob2.nocon=x+1;
+      else 
+       ob2.nocon=0;
+}
+
+
+cout<<ob2.to_string(); 
+
+
 
 return 0;
 }

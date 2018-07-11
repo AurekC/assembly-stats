@@ -27,8 +27,8 @@ public:
   string to_string() {
     std::stringstream ss;
     ss << "N Sequences\t" << nos << '\n'
-       << "A\t" << noa << '\n' << "T\t" << not1 << '\n' << "G\t" << nog << '\n' << " C\t" << noc 
-<<'\n' << "N\t" << non <<'\n'<< "N contigs\t" << nocon << '\n' << "total\t" << total << '\n';
+       << "A\t" << noa << '\n' << "T\t" << not1 << '\n' << "G\t" << nog << '\n' << "C\t" << noc 
+<<'\n' << "N\t" << non <<'\n'<< "N contigs\t" << nocon << '\n' << "total\t" << total << '\n'<< "longest scaffold\t" << longest << "\n" << "shortest scaffold\t" << shortest << "\n" << "median\t" << median << "\n" << "mean\t" << mean << '\n';
     return ss.str();
   }
   uint64_t nos = 0;
@@ -38,6 +38,10 @@ public:
   uint64_t noc = 0;
   uint64_t non = 0;
   uint64_t nocon = 0;
+  uint64_t longest = 0;
+  uint64_t shortest = 0;
+  double median = 0.0;
+  double mean= 0.0;
   double a_percent = 0.0;
   double t_percent = 0.0;
   double g_percent = 0.0;
@@ -47,9 +51,9 @@ public:
 };
 
 int main(const int argc, const char ** argv)
-{
+{ int i=0;
   ifstream fin("plantgenome.txt");
-
+  vector<int> los;
   vector<genome> genome_vec;
 
   stats ob2;
@@ -118,12 +122,40 @@ for (genome& record: genome_vec)
       else 
        ob2.nocon=0;
 }
+int t=0;
+for(genome& record: genome_vec)
+ { t=0;
+for(char& nuc : record.seq())
+   {
+     t++;
+   }
+   los.pushback(t); 
+ } 
+ 
 
+for(i=0;i<los.end()-1;i++)
+ for(int j=0;j<los.end()-i-1;j++)
+   {
+       if(los[j]>los[j+1])
+        { int temp= los[j];
+          los[j]=los[j+1];
+          los[j+1]=temp;
+        }
+   }
+ob2.longest=los.back();
+ob2.shortest=los.front();
+ for( i=0; i<los.end();i++)
+  {
+     ob2.mean+=los[i];
+  }
+ob2.mean=ob2.mean/(i-1);
 
-cout<<ob2.to_string(); 
+if(i%2!=0)
+ ob2.median=los[(i+1)/2];
+else
+  ob2.median=(los[i/2]+los[(i+2)/2])/2;
 
-
-
+cout<<ob2.to_string();
 return 0;
 }
 

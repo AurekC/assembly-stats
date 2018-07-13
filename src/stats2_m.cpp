@@ -36,7 +36,8 @@ public:
        << nocon << '\n' << "total\t" << total << '\n'
        << "longest scaffold\t" << longest << "\n"
        << "shortest scaffold\t" << shortest << "\n"
-       << "median\t" << median << "\n" << "mean\t" << mean << '\n';
+       << "median\t" << median << "\n" << "mean\t" << mean << '\n'
+       <<  "n50\t"   << n50    << "\n" <<  "l50\t" <<l50   <<'\n';
     return ss.str();
   }
   uint64_t nos = 0;
@@ -48,6 +49,8 @@ public:
   uint64_t nocon = 0;
   uint64_t longest = 0;
   uint64_t shortest = 0;
+  double n50 = 0;
+  double l50 = 0;
   double median = 0.0;
   double mean = 0.0;
   double a_percent = 0.0;
@@ -162,6 +165,27 @@ int main(const int argc, const char ** argv)
     ob2.median = los[(los.size() + 1) / 2];
   else
     ob2.median = (los[los.size() / 2] + los[(los.size() + 2) / 2]) / 2;
+
+int z=0;
+int w=0;
+
+for (genome& record : genome_vec)
+{ z=0;w++;
+ for(char& nuc: record.seq())
+ {
+   z++;
+   
+ }
+ if( z= (ob2.total/2))
+  {
+       ob2.n50=z;
+       ob2.l50=w;
+  }
+
+}
+
+
+
 
   cout << ob2.to_string();
   return 0;

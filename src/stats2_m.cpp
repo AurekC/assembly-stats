@@ -166,26 +166,20 @@ int main(const int argc, const char ** argv)
   else
     ob2.median = (los[los.size() / 2] + los[(los.size() + 2) / 2]) / 2;
 
-int z=0;
-int w=0;
+  uint64_t z = 0;
+  uint64_t w = 0;
 
-for (genome& record : genome_vec)
-{ z=0;w++;
- for(char& nuc: record.seq())
- {
-   z++;
-   
- }
- if( z= (ob2.total/2))
-  {
-       ob2.n50=z;
-       ob2.l50=w;
-  }
-
-}
-
-
-
+  for (auto it = los.rbegin(); it != los.rend(); it++)
+    {
+      z += *it;
+      w++;
+      if( z >= (ob2.total / 2))
+        {
+          ob2.n50 = *it;
+          ob2.l50 = w;
+          break;
+        }
+    }
 
   cout << ob2.to_string();
   return 0;
